@@ -13,38 +13,23 @@ type todoList = {
   isDel: boolean;
 };
 
-type AllTodo = {
-  [key: string]: todoList;
-};
 
 export default function Todo({}: Props) {
-  const {open}=UseTodo()
-  const [allTodo, setTodo] = useState<todoList[]>([
-    {
-      ID: 0,
-      Todo: "",
-      Check: false,
-      isDel: false,
-    },
-  ]);
+  const {allTodo,setAllTodo,open,setOpen,editOpen,setEditOpen,editInput,setEditInput}=UseTodo()
 
-console.log(open)
-  useEffect(() => {
-    if (open ==false){
-      todoList();
-
-    }
-  }, [open]);
+  useEffect(()=>{
+    todoList()
+  },[])
 
   const todoList = async () => {
     try {
       const { todo } = await GetTodo();
-      setTodo(todo);
+      setAllTodo(todo);
     } catch (error) {
       throw error;
     }
   };
-
+ 
   const deleteHandleSubmit = async (e:React.MouseEvent<HTMLButtonElement>,ID:number)=>{
     const IsDel:boolean = true
     try {
@@ -59,17 +44,28 @@ console.log(open)
 
   }
 
+  const editHandleClick = (e:React.MouseEvent<HTMLButtonElement>,id:number,todo:string)=>{
+    e.preventDefault()
+    setEditOpen(!editOpen)
+    setEditInput({id,todo})
+
+  }
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col ">
       {allTodo &&
         allTodo.map((el) => (
           <div key={el.ID} className="flex justify-between py-2 border-b-2">
             <div className="flex items-center  pl-4">
               <div>{el.Todo}</div>
             </div>
-            <div className="flex items-center gap-4">
+            <div className="flex items-center gap-4 w-[150px]">
               <div>
-                <input type="checkbox" />
+              <button type="button" className="bg-blue-950 py-2 px-2 rounded-md font-bold text-white" onClick={(e)=>{
+                editHandleClick(e,el.ID,el.Todo)
+              }}>
+                  Edit
+                </button>
               </div>
               <div>
                 <button type="button" className="bg-red-600 py-2 px-3 rounded-md font-bold text-white" onClick={(e)=>{

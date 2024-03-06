@@ -9,7 +9,7 @@ export default function Home() {
 
     <div className="w-[100vw] h-[100vh] flex flex-col items-center gap-4">
 
-      <div className="w-full"><ButtonAddTodo/></div>
+      <div className="w-full "><ButtonAddTodo/></div>
       <div className=" flex justify-center w-full">
         <TodoList />
       </div>

@@ -2,6 +2,7 @@
 import React, { SetStateAction, useState } from "react";
 import { GetTodo } from "../api/GetTodo";
 import { AddTodo } from "../api/AddTodo";
+import { UseTodo } from "../context/useTodo";
 
 type Props = {
 open:boolean;
@@ -11,7 +12,8 @@ setOpen:React.Dispatch<SetStateAction<boolean>>
 
 export default  function Modal({open,setOpen}: Props) {
 
-  const [input,setInput]=useState<string>("")
+  const {input,setInput,setAllTodo}=UseTodo()
+
  
   const inputHandleChange = (e: React.ChangeEvent<HTMLInputElement>)=>{
     const data:string = e.target.value
@@ -22,7 +24,8 @@ const addTodoSubmit = async (e:React.SyntheticEvent)=>{
   try {
     e.preventDefault()
   await AddTodo(input)
-  await GetTodo()
+  const {todo} = await GetTodo()
+  setAllTodo(todo)
     setOpen(!open)
     setInput("")
   } catch (error) {
